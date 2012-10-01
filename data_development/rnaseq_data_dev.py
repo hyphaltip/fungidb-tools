@@ -32,7 +32,8 @@ GROUPS = (("Spherules", "Parasitic spherule"),
 full_species = "{genus} {species}".format(genus=GENUS, species=SPECIES)
 abbrev_species = "{genus}. {species}".format(genus=GENUS[0], species=SPECIES)
 short_species = "{genus}{species}".format(genus=GENUS[0], species=SPECIES[:3])
-full_strain = "{short_species}{strain}".format(short_species=short_species, strain=STRAIN)
+full_strain = "{short_species}{strain}".format(short_species=short_species,
+                                               strain=STRAIN)
 per_dbname = "percentile - {dbname}".format(dbname=DBNAME)
 diff_dbname = "{dbname}-diff".format(dbname=DBNAME)
 
@@ -72,10 +73,12 @@ sub init {{
 
 1;
 
-""".format(perl_dir=perl_dir, perl_script=perl_script, dbname=DBNAME, diff_dbname=diff_dbname, per_dbname=per_dbname))
+""".format(perl_dir=perl_dir, perl_script=perl_script, dbname=DBNAME,
+           diff_dbname=diff_dbname, per_dbname=per_dbname))
 
 graph = "{perl_script}_graph".format(perl_script=perl_script)
-graph_display = "{abbrev_species} RNASeq - Graph".format(abbrev_species=abbrev_species)
+graph_display = "{abbrev_species} RNASeq - Graph".format(
+    abbrev_species=abbrev_species)
 print("""#< $PROJECT_HOME/ApiCommonShared/Model/lib/wdk/apiCommonModel/records/geneRecord.xml
 
                 <textAttribute name=\"{graph}\"
@@ -90,7 +93,8 @@ print("""#< $PROJECT_HOME/ApiCommonShared/Model/lib/wdk/apiCommonModel/records/g
                     </text>
                 </textAttribute>
 
-""".format(graph=graph, graph_display=graph_display, perl_dir=perl_dir, perl_script=perl_script))
+""".format(graph=graph, graph_display=graph_display, perl_dir=perl_dir,
+           perl_script=perl_script))
 
 qryname = "{title}RnaSeqProfiles".format(title=TITLE)
 per_qryname = "{title}RnaSeqPercentiles".format(title=TITLE)
@@ -122,14 +126,18 @@ print("""#< $PROJECT_HOME/ApiCommonShared/Model/lib/wdk/apiCommonModel/questions
             </sql>
         </sqlQuery>
 
-""".format(qryname=qryname, per_qryname=per_qryname, dbname=DBNAME, per_dbname=per_dbname, experiment=EXPERIMENT))
+""".format(qryname=qryname, per_qryname=per_qryname, dbname=DBNAME,
+           per_dbname=per_dbname, experiment=EXPERIMENT))
 
 question = "GenesByRnaSeqFoldChange{title}".format(title=TITLE)
 per_question = "GenesByRnaSeqPercentile{title}".format(title=TITLE)
-display = "{short_species} {experiment} Rna Seq (fold change)".format(short_species=short_species, experiment=EXPERIMENT)
-per_display = "{short_species} {experiment} Rna Seq (percentile)".format(short_species=short_species, experiment=EXPERIMENT)
+display = "{short_species} {experiment} Rna Seq (fold change)".format(
+    short_species=short_species, experiment=EXPERIMENT)
+per_display = "{short_species} {experiment} Rna Seq (percentile)".format(
+    short_species=short_species, experiment=EXPERIMENT)
 short_display = "{short_species} RNASeq fc".format(short_species=short_species)
-summary = "Identify <i>{full_species}</i> genes based on expression fold change.".format(full_species=full_species)
+summary = "Identify <i>{full_species}</i> genes based on expression fold \
+change.".format(full_species=full_species)
 print("""#< $PROJECT_HOME/ApiCommonShared/Model/lib/wdk/apiCommonModel/questions/geneQuestions.xml
 
     <question name=\"{question}\" includeProjects=\"FungiDB\"
@@ -217,7 +225,10 @@ print("""#< $PROJECT_HOME/ApiCommonShared/Model/lib/wdk/apiCommonModel/questions
         </propertyList>
     </question>
 
-""".format(question=question, per_question=per_question, display=display, per_display=per_display, short_display=short_display, graph=graph, qryname=qryname, per_qryname=per_qryname, summary=summary, description=DESCRIPTION))
+""".format(question=question, per_question=per_question, display=display,
+           per_display=per_display, short_display=short_display, graph=graph,
+           qryname=qryname, per_qryname=per_qryname, summary=summary,
+           description=DESCRIPTION))
 
 print("""#< $PROJECT_HOME/ApiCommonShared/Model/lib/wdk/apiCommonModel/questions/categories.xml
 
@@ -230,7 +241,8 @@ print("""#< $PROJECT_HOME/ApiCommonWebsite/Site/webapp/wdkCustomization/jsp/ques
 
 {short_species}study:{experiment},GeneQuestions.{question},GeneQuestions.{per_question}
 
-""".format(short_species=short_species, experiment=EXPERIMENT, question=question, per_question=per_question))
+""".format(short_species=short_species, experiment=EXPERIMENT,
+           question=question, per_question=per_question))
 
 print("""#< $PROJECT_HOME/ApiCommonWebsite/Site/webapp/WEB-INF/tags/site/queryList.tag
 
@@ -241,8 +253,11 @@ print("""#< $PROJECT_HOME/ApiCommonWebsite/Site/webapp/WEB-INF/tags/site/queryLi
 """.format(short_species=short_species, full_species=full_species))
 
 long_title = "RnaSeq{title}".format(title=TITLE)
-study_name = "{full_strain}_{author}_{experiment}_rnaSeq_RSRC".format(full_strain=full_strain, author=AUTHOR, experiment=EXPERIMENT.replace(' ', ''))
-key = "{full_strain} mRNA RNASeq {author} {experiment}".format(full_strain=full_strain, author=AUTHOR, experiment=EXPERIMENT)
+study_name = "{full_strain}_{author}_{experiment}_rnaSeq_RSRC".format(
+    full_strain=full_strain, author=AUTHOR, experiment=EXPERIMENT.replace(' ',
+                                                                          ''))
+key = "{full_strain} mRNA RNASeq {author} {experiment}".format(
+    full_strain=full_strain, author=AUTHOR, experiment=EXPERIMENT)
 sep = '\n' + ' ' * 18
 table = sep.join(":'{}' {} ;".format(l, s) for s, l in GROUPS)
 print("""#< $PROJECT_HOME/ApiCommonWebsite/Site/conf/gbrowse.conf/fungidb.conf
@@ -269,7 +284,8 @@ key          = {key}
 group_label  = 1
 citation     = {citation}
 
-""".format(long_title=long_title, study_name=study_name, table=table, key=key, citation=CITATION))
+""".format(long_title=long_title, study_name=study_name, table=table, key=key,
+           citation=CITATION))
 
 print("""#< $PROJECT_HOME/ApiCommonShared/Model/lib/xml/gbrowseImageUrls.xml
 
@@ -298,7 +314,8 @@ select \'{dbname}\' as profile_name,
 
     UNION
 
-""".format(dbname=DBNAME, perl_dir=perl_dir, perl_script=perl_script, description=DESCRIPTION))
+""".format(dbname=DBNAME, perl_dir=perl_dir, perl_script=perl_script,
+           description=DESCRIPTION))
 
 print("""#<
 bldw ApiCommonWebsite/Site $WWW/etc/webapp.prop

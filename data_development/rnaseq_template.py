@@ -23,30 +23,39 @@ from datadev_templates import (make_perl_script, make_geneRecord,
 
 # Species information
 GENUS = "Coccidioides"
-SPECIES = "immitis"
-STRAIN = "RS"
+SPECIES = "posadasii"
+STRAIN = "C735"
 # From database
-DBNAME = "C immitis saprobic hyphae and parasitic spherules"
+DBNAME = "C. posadasii saprobic hyphae and parasitic spherules"
 GROUPS = (("Spherules", "Parasitic spherule"),
           ("Hyphae", "Saprobic hyphae"),
           )
 # Study information
-TITLE = "CimmComTran"
+TITLE = "CposComTran"
 AUTHOR = "Taylor"
 EXPERIMENT = "Comparative Transcriptomics"
 PMID = '22911737'
 CITATION = "Emily Whiston et al (Taylor lab at UC Berkeley) Comparative \
 Transcriptomics of the Saprobic and Parasitic Growth Phases in \
 Coccidioides spp."
-SUMMARY = "TODO"
-PROTOCOL = "TODO"
-DESCRIPTION = "This study used comparative transcriptomics to identify gene \
-expression differences between the saprobic and parasitic growth phases. They \
-prepared Illumina mRNA sequencing libraries for saprobic-phase hyphae and \
+SUMMARY = "Comparative transcriptomics were used to identify gene \
+expression differences between the saprobic and parasitic growth phases of \
+Coccidiodes immitis and C. posadasii. Of the 9,910 total predicted genes in \
+Coccidioides, 1,298 genes were observed to be up-regulated in the saprobic \
+phase of both C. immitis and C. posadasii and 1,880 genes were observed to be \
+up-regulated in the parasitic phase of both species"
+PROTOCOL = "Illumina mRNA sequencing libraries for saprobic-phase hyphae and \
 parasitic-phase spherules in vitro for C. immitis isolate RS and C. posadasii \
-isolate C735 in biological triplicate."
-CONTACTS = ({'name': 'John'},)
-URLS = ('',)
+isolate C735 were prepared in biological triplicate"
+DESCRIPTION = "Comparative transcriptomics were used to identify gene \
+expression differences between the saprobic and parasitic growth phases. \
+The results highlighted a number of genes that may be crucial to dimorphic \
+phase-switching and virulence in Coccidioides."
+CONTACTS = ({'name': 'Emily Whiston',
+             'email': 'whiston@berkeley.edu',
+             'institution': 'University of California, Berkeley',
+             },)
+URLS = ('http://trace.ncbi.nlm.nih.gov/Traces/sra/?study=SRP013923',)
 
 
 full_species = "{genus} {species}".format(genus=GENUS, species=SPECIES)

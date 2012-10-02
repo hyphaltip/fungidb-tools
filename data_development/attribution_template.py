@@ -5,85 +5,49 @@
 Edward Liaw
 """
 
-title =                     ''
-pmid =                      ''
-display =                   ''
-summary =                   ''
-protocol =                  ''
-description =               ''
-url =                       'http://'
-contacts = ({'name':        '',
-             'email':       '',
-             'institution': '',
-             'address':     '',
-             'city':        '',
-             'state':       '',
-             'country':     '',
-             'zip':         '',
-             },
-            )
-links = (                   '',
-         )
+from datadev_templates import (make_attributions, make_contact_block,
+                               make_url_block)
 
-CONTACT_ORDER = ('name', 'email', 'institution', 'address', 'city', 'state',
-                 'country', 'zip')
+GENUS = "Coccidioides"
+SPECIES = "posadasii"
+STRAIN = "C735"
+AUTHOR = "Taylor"
+EXPERIMENT = "Comparative Transcriptomics"
+PMID = '22911737'
+SUMMARY = "Comparative transcriptomics were used to identify gene \
+expression differences between the saprobic and parasitic growth phases of \
+Coccidiodes immitis and C. posadasii. Of the 9,910 total predicted genes in \
+Coccidioides, 1,298 genes were observed to be up-regulated in the saprobic \
+phase of both C. immitis and C. posadasii and 1,880 genes were observed to be \
+up-regulated in the parasitic phase of both species"
+PROTOCOL = "Illumina mRNA sequencing libraries for saprobic-phase hyphae and \
+parasitic-phase spherules in vitro for C. immitis isolate RS and C. posadasii \
+isolate C735 were prepared in biological triplicate"
+DESCRIPTION = "Comparative transcriptomics were used to identify gene \
+expression differences between the saprobic and parasitic growth phases. \
+The results highlighted a number of genes that may be crucial to dimorphic \
+phase-switching and virulence in Coccidioides."
+CONTACTS = ({'name': 'Emily Whiston',
+             'email': 'whiston@berkeley.edu',
+             'institution': 'University of California, Berkeley',
+             },)
+URLS = ('http://trace.ncbi.nlm.nih.gov/Traces/sra/?study=SRP013923',)
 
-CONTACT_HEAD = "       <contact isPrimaryContact=\"{primary}\">"
-CONTACT_BODY = "           <{key}>{val}</{key}>"
-CONTACT_TAIL = "       </contact>"
+
+short_species = "{genus}{species}".format(genus=GENUS[0], species=SPECIES[:3])
+full_strain = "{short_species}{strain}".format(short_species=short_species,
+                                               strain=STRAIN)
+study_name = "{full_strain}_{author}_{experiment}_rnaSeq_RSRC".format(
+    full_strain=full_strain, author=AUTHOR, experiment=EXPERIMENT.replace(' ',
+                                                                          ''))
+display = "{short_species} {experiment} Rna Seq".format(
+    short_species=short_species, experiment=EXPERIMENT)
+attr_display = "{display} Expression Data".format(display=display)
 
 
-def make_contact_block(contacts=contacts):
-    """Generate xml section for contacts."""
-    contact_block = []
-    contact_block.append("    <contacts>")
-    primary = 'true'
-    for contact in contacts:
-        contact_block.append(CONTACT_HEAD.format(primary=primary))
-        primary = 'false'
-        contact_block.append('\n'.join(CONTACT_BODY.format(
-            key=next_field, val=contact[next_field]) for next_field in CONTACT_ORDER))
-        contact_block.append(CONTACT_TAIL)
-    contact_block.append("    </contacts>")
-    return '\n'.join(contact_block)
-
-print("""
-  <dataSourceAttribution  resource=\"{title}\" overridingType=\"\" overridingSubtype=\"\" ignore=\"False\">
-
-    <publications>
-      <publication pmid=\"{pmid}\"/>
-    </publications>
-
-{contact_block}
-
-    <displayName>{display}</displayName>
-    <summary><![CDATA[
-{summary}
-]]>
-    </summary>
-    <protocol><![CDATA[
-{protocol}
-]]></protocol>
-    <caveat><![CDATA[]]></caveat>
-    <acknowledgement><![CDATA[]]></acknowledgement>
-    <releasePolicy></releasePolicy>
-    <description><![CDATA[
-{description}
-]]>
-    </description>
-
-    <links>
-        <link>
-           <!-- downloadFile, SupplementaryData, sampleStrategy, publicUrl -->
-           <type>publicUrl</type>
-           <url>{url}</url>
-           <linkDescription></linkDescription>
-        </link>
-    </links>
-
-    <wdkReference recordClass=\"\" type=\"\" name=\"\"/>
-
-  </dataSourceAttribution>
-""".format(title=title, pmid=pmid, display=display,
-           contact_block=make_contact_block(contacts), summary=summary,
-           protocol=protocol, description=description, url=url))
+print(make_attributions(study_name=study_name, pmid=PMID,
+                        attr_display=attr_display,
+                        contact_block=make_contact_block(CONTACTS),
+                        summary=SUMMARY, protocol=PROTOCOL,
+                        description=DESCRIPTION,
+                        url_block=make_url_block(URLS)))

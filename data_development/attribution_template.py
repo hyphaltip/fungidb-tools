@@ -48,8 +48,6 @@ def make_contact_block(contacts=contacts):
     return '\n'.join(contact_block)
 
 print("""
-<dataSourceAttributions>
-
   <dataSourceAttribution  resource=\"{title}\" overridingType=\"\" overridingSubtype=\"\" ignore=\"False\">
 
     <publications>

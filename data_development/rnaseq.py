@@ -4,7 +4,7 @@
 Usage: Change the values of the first few strings to match the experiment
 information.  Then run:
 
-    python rnaseq_data_dev.py > cimm.txt
+    python rnaseq.py > cimm.txt
 
 You can follow filenames in VIM (gf) and run shell commands by selecting the
 line (V) and (:w !sh).  Filenames are preceded by '#< ' in the output file.

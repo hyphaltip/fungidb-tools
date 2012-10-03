@@ -1,0 +1,109 @@
+#!/usr/bin/env python2.7
+"""Generate str.format arguments for field-specified block quotes.
+
+2012/10/03
+Edward Liaw
+"""
+from __future__ import print_function
+import sys
+import argparse
+import re
+
+IDENTIFIER = r"(?P<identifier>[A-Za-z_]\w+)"
+FIELD = r"[^{](?:\{\{)*?\{%s\}(?:\}\})*?[^}]" % IDENTIFIER
+RE_FORMAT_FIELD = re.compile(FIELD)
+
+
+class OpenBlockException(Exception):
+    pass
+
+
+def iter_block(infile):
+    """Iterate through each block-quoted string.
+
+    Yields:
+        Block-quoted string.
+    """
+    block = []
+    quotes = None
+    for line in infile:
+        while line:
+            index = None
+            if quotes is None:
+                # We're not in a quote block. Look for an opening quote.
+                double = None
+                single = None
+                try:
+                    double = line.index('"""')  # Raises if no quotes.
+                    try:
+                        single = line.index("'''")  # Raises if no quotes.
+                        # Two types of block quotes in this line. Check for the
+                        # closest one.
+                        if double < single:
+                            quotes, index = '"""', double
+                        else:
+                            quotes, index = "'''", single
+                    except ValueError:
+                        quotes, index = '"""', double
+                except ValueError:
+                    try:
+                        single = line.index("'''")  # Raises if no quotes.
+                        quotes, index = "'''", single
+                    except ValueError:
+                        # No block quotes in this line. We're done.
+                        break
+                # Move line forward to this quote.
+                line = line[index + 3:]
+            try:
+                # In a quote block. Look for closing quotes.
+                index = line.index(quotes)  # Raises if no quotes.
+                block.append(line[:index])
+                yield ''.join(block)
+
+                # Move line forward to the quote and clear the previous block.
+                line = line[index + 3:]
+                block = []
+                quotes = None
+            except ValueError:
+                # The block continues past this line.
+                block.append(line)
+                break
+    if block:
+        # Block should be empty.
+        raise OpenBlockException("File contains an open block at the end:\n" +
+                                 ''.join(block))
+
+
+def parse_arguments():
+    """Handle command-line arguments.
+
+    Returns:
+        args: Arguments passed in from the command-line."""
+    parser = argparse.ArgumentParser(description=__doc__,
+                                     fromfile_prefix_chars='@')
+    parser.add_argument('infile',
+                        type=argparse.FileType('r'), nargs='?',
+                        default=sys.stdin, help='input file')
+    parser.add_argument('outfile',
+                        type=argparse.FileType('w'), nargs='?',
+                        default=sys.stdout, help='output file')
+    return parser.parse_args()
+
+
+def main():
+    args = parse_arguments()
+
+    # Handle I/O.
+    with args.infile as infile, args.outfile as outfile:
+        for block in iter_block(infile):
+            identifiers = RE_FORMAT_FIELD.findall(block)
+            if identifiers:
+                format_args = ', '.join('{0}={0}'.format(iden)
+                                        for iden in identifiers)
+
+                print('"""{block}""".format({args})'.format(
+                    block=block, args=format_args), file=outfile)
+
+
+if __name__ == "__main__":
+    main()

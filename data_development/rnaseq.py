@@ -76,8 +76,8 @@ print(make_perl_script(perl_dir=perl_dir, perl_script=perl_script,
 
 
 graph = "{perl_script}_graph".format(perl_script=perl_script)
-graph_display = "{short_species} RNASeq - Graph".format(
-    short_species=short_species)
+graph_display = "{short_species} {experiment} RNASeq - Graph".format(
+    short_species=short_species, experiment=EXPERIMENT)
 
 
 print(make_geneRecord(graph=graph, graph_display=graph_display,

@@ -59,14 +59,14 @@ URLS = ('http://trace.ncbi.nlm.nih.gov/Traces/sra/?study=SRP013923',)
 
 
 full_species = "{genus} {species}".format(genus=GENUS, species=SPECIES)
-abbrev_species = "{genus}. {species}".format(genus=GENUS[0], species=SPECIES)
-short_species = "{genus}{species}".format(genus=GENUS[0], species=SPECIES[:3])
-full_strain = "{short_species}{strain}".format(short_species=short_species,
-                                               strain=STRAIN)
+short_species = "{genus}.{species}".format(genus=GENUS[0], species=SPECIES)
+abbrev_species = "{genus}{species}".format(genus=GENUS[0], species=SPECIES[:3])
+abbrev_strain = "{abbrev_species}{strain}".format(abbrev_species=abbrev_species,
+                                                  strain=STRAIN)
 pct_dbname = "percentile - {dbname}".format(dbname=DBNAME)
 diff_dbname = "{dbname}-diff".format(dbname=DBNAME)
 
-perl_dir = "{full_strain}".format(full_strain=full_strain)
+perl_dir = "{abbrev_strain}".format(abbrev_strain=abbrev_strain)
 perl_script = "{title}RnaSeq".format(title=TITLE)
 
 
@@ -76,8 +76,8 @@ print(make_perl_script(perl_dir=perl_dir, perl_script=perl_script,
 
 
 graph = "{perl_script}_graph".format(perl_script=perl_script)
-graph_display = "{abbrev_species} RNASeq - Graph".format(
-    abbrev_species=abbrev_species)
+graph_display = "{short_species} RNASeq - Graph".format(
+    short_species=short_species)
 
 
 print(make_geneRecord(graph=graph, graph_display=graph_display,
@@ -94,9 +94,9 @@ print(make_geneParams(qryname=qryname, pct_qryname=pct_qryname, dbname=DBNAME,
 
 fc_question = "GenesByRnaSeqFoldChange{title}".format(title=TITLE)
 pct_question = "GenesByRnaSeqPercentile{title}".format(title=TITLE)
-display = "{short_species} {experiment} Rna Seq".format(
-    short_species=short_species, experiment=EXPERIMENT)
-short_display = "{short_species} RNASeq".format(short_species=short_species)
+display = "{abbrev_species} {experiment} Rna Seq".format(
+    abbrev_species=abbrev_species, experiment=EXPERIMENT)
+short_display = "{abbrev_species} RNASeq".format(abbrev_species=abbrev_species)
 fc_summary = "Identify <i>{full_species}</i> genes based on expression \
 fold change.".format(full_species=full_species)
 pct_summary = "Identify <i>{full_species}</i> genes based on expression \
@@ -112,19 +112,19 @@ print(make_geneQuestions(fc_question=fc_question, pct_question=pct_question,
 
 print(make_categories(fc_question=fc_question, pct_question=pct_question))
 
-print(make_queryList(short_species=short_species, full_species=full_species))
+print(make_queryList(abbrev_species=abbrev_species, full_species=full_species))
 
-print(make_GenesByRNASeqEvidence(short_species=short_species,
+print(make_GenesByRNASeqEvidence(abbrev_species=abbrev_species,
                                  study=EXPERIMENT, fc_question=fc_question,
                                  pct_question=pct_question))
 
 
 long_title = "RnaSeq{title}".format(title=TITLE)
-study_name = "{full_strain}_{author}_{experiment}_rnaSeq_RSRC".format(
-    full_strain=full_strain, author=AUTHOR, experiment=EXPERIMENT.replace(' ',
-                                                                          ''))
-key = "{full_strain} mRNA RNASeq {author} {experiment}".format(
-    full_strain=full_strain, author=AUTHOR, experiment=EXPERIMENT)
+study_name = "{abbrev_strain}_{author}_{experiment}_rnaSeq_RSRC".format(
+    abbrev_strain=abbrev_strain, author=AUTHOR,
+    experiment=EXPERIMENT.replace(' ', ''))
+key = "{abbrev_strain} mRNA RNASeq {author} {experiment}".format(
+    abbrev_strain=abbrev_strain, author=AUTHOR, experiment=EXPERIMENT)
 sep = '\n' + ' ' * 18
 table = sep.join(":'{}' {} ;".format(l, s) for s, l in GROUPS)
 

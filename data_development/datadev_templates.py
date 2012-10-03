@@ -217,12 +217,12 @@ def make_categories(**kwargs):
 
 def make_queryList(**kwargs):
     """Usage:
-    print(make_queryList(short_species=short_species, full_species=full_species))
+    print(make_queryList(abbrev_species=abbrev_species, full_species=full_species))
     """
     return """
 #< $PROJECT_HOME/ApiCommonWebsite/Site/webapp/WEB-INF/tags/site/queryList.tag
 
-<c:when test=\"${{prefix == \'{short_species}\'}}\">
+<c:when test=\"${{prefix == \'{abbrev_species}\'}}\">
     <c:set var=\"org\" value=\"{full_species}\"/>
 </c:when>
 """.format(**kwargs)
@@ -230,14 +230,14 @@ def make_queryList(**kwargs):
 
 def make_GenesByRNASeqEvidence(**kwargs):
     """Usage:
-    print(make_GenesByRNASeqEvidence(short_species=short_species,
+    print(make_GenesByRNASeqEvidence(abbrev_species=abbrev_species,
                                      study=EXPERIMENT, fc_question=fc_question,
                                      pct_question=pct_question))
     """
     return """
 #< $PROJECT_HOME/ApiCommonWebsite/Site/webapp/wdkCustomization/jsp/questions/InternalQuestions.GenesByRNASeqEvidence.form.jsp
 
-{short_species}study:{study},GeneQuestions.{fc_question},GeneQuestions.{pct_question}
+{abbrev_species}study:{study},GeneQuestions.{fc_question},GeneQuestions.{pct_question}
 """.format(**kwargs)
 
 

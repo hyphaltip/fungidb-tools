@@ -58,86 +58,92 @@ CONTACTS = ({'name': 'Emily Whiston',
 URLS = ('http://trace.ncbi.nlm.nih.gov/Traces/sra/?study=SRP013923',)
 
 
-full_species = "{genus} {species}".format(genus=GENUS, species=SPECIES)
-short_species = "{genus}.{species}".format(genus=GENUS[0], species=SPECIES)
-abbrev_species = "{genus}{species}".format(genus=GENUS[0], species=SPECIES[:3])
-abbrev_strain = "{abbrev_species}{strain}".format(abbrev_species=abbrev_species,
-                                                  strain=STRAIN)
-pct_dbname = "percentile - {dbname}".format(dbname=DBNAME)
-diff_dbname = "{dbname}-diff".format(dbname=DBNAME)
+def make_rnaseq(genus, species, strain, dbname, groups, title, author,
+                experiment, pmid, citation, summary, protocol, description,
+                contacts, urls):
+    """Usage:
+    make_rnaseq(genus=GENUS, species=SPECIES, strain=STRAIN, dbname=DBNAME,
+                groups=GROUPS, title=TITLE, author=AUTHOR,
+                experiment=EXPERIMENT, pmid=PMID, citation=CITATION,
+                summary=SUMMARY, protocol=PROTOCOL, description=DESCRIPTION,
+                contacts=CONTACTS, urls=URLS)
+    """
+    full_species = "{genus} {species}".format(genus=genus, species=species)
+    short_species = "{genus}.{species}".format(genus=genus[0], species=species)
+    abbrev_species = "{genus}{species}".format(genus=genus[0],
+                                               species=species[:3])
+    abbrev_strain = "{abbrev_species}{strain}".format(
+        abbrev_species=abbrev_species, strain=strain)
+    pct_dbname = "percentile - {dbname}".format(dbname=dbname)
+    diff_dbname = "{dbname}-diff".format(dbname=dbname)
 
-perl_dir = "{abbrev_strain}".format(abbrev_strain=abbrev_strain)
-perl_script = "{title}RnaSeq".format(title=TITLE)
+    perl_dir = "{abbrev_strain}".format(abbrev_strain=abbrev_strain)
+    perl_script = "{title}RnaSeq".format(title=title)
 
+    print(make_perl_script(perl_dir=perl_dir, perl_script=perl_script,
+                           dbname=dbname, diff_dbname=diff_dbname,
+                           pct_dbname=pct_dbname))
 
-print(make_perl_script(perl_dir=perl_dir, perl_script=perl_script,
-                       dbname=DBNAME, diff_dbname=diff_dbname,
-                       pct_dbname=pct_dbname))
+    graph = "{perl_script}_graph".format(perl_script=perl_script)
+    graph_display = "{short_species} {experiment} RNASeq - Graph".format(
+        short_species=short_species, experiment=experiment)
 
+    print(make_geneRecord(graph=graph, graph_display=graph_display,
+                          perl_dir=perl_dir, perl_script=perl_script))
 
-graph = "{perl_script}_graph".format(perl_script=perl_script)
-graph_display = "{short_species} {experiment} RNASeq - Graph".format(
-    short_species=short_species, experiment=EXPERIMENT)
+    qryname = "{title}RnaSeqProfiles".format(title=title)
+    pct_qryname = "{title}RnaSeqPercentiles".format(title=title)
 
+    print(make_geneParams(qryname=qryname, pct_qryname=pct_qryname,
+                          dbname=dbname, pct_dbname=pct_dbname,
+                          display=experiment))
 
-print(make_geneRecord(graph=graph, graph_display=graph_display,
-                      perl_dir=perl_dir, perl_script=perl_script))
-
-
-qryname = "{title}RnaSeqProfiles".format(title=TITLE)
-pct_qryname = "{title}RnaSeqPercentiles".format(title=TITLE)
-
-
-print(make_geneParams(qryname=qryname, pct_qryname=pct_qryname, dbname=DBNAME,
-                      pct_dbname=pct_dbname, display=EXPERIMENT))
-
-
-fc_question = "GenesByRnaSeqFoldChange{title}".format(title=TITLE)
-pct_question = "GenesByRnaSeqPercentile{title}".format(title=TITLE)
-display = "{abbrev_species} {experiment} Rna Seq".format(
-    abbrev_species=abbrev_species, experiment=EXPERIMENT)
-short_display = "{abbrev_species} RNASeq".format(abbrev_species=abbrev_species)
-fc_summary = "Identify <i>{full_species}</i> genes based on expression \
+    fc_question = "GenesByRnaSeqFoldChange{title}".format(title=title)
+    pct_question = "GenesByRnaSeqPercentile{title}".format(title=title)
+    display = "{abbrev_species} {experiment} Rna Seq".format(
+        abbrev_species=abbrev_species, experiment=experiment)
+    short_display = "{abbrev_species} RNASeq".format(
+        abbrev_species=abbrev_species)
+    fc_summary = "Identify <i>{full_species}</i> genes based on expression \
 fold change.".format(full_species=full_species)
-pct_summary = "Identify <i>{full_species}</i> genes based on expression \
+    pct_summary = "Identify <i>{full_species}</i> genes based on expression \
 percentiles.".format(full_species=full_species)
 
+    print(make_geneQuestions(fc_question=fc_question, pct_question=pct_question,
+                             display=display, short_display=short_display,
+                             graph=graph, qryname=qryname,
+                             pct_qryname=pct_qryname, fc_summary=fc_summary,
+                             pct_summary=pct_summary,
+                             fc_description=description,
+                             pct_description=description))
 
-print(make_geneQuestions(fc_question=fc_question, pct_question=pct_question,
-                         display=display, short_display=short_display,
-                         graph=graph, qryname=qryname, pct_qryname=pct_qryname,
-                         fc_summary=fc_summary, pct_summary=pct_summary,
-                         fc_description=DESCRIPTION,
-                         pct_description=DESCRIPTION))
+    print(make_categories(fc_question=fc_question, pct_question=pct_question))
 
-print(make_categories(fc_question=fc_question, pct_question=pct_question))
+    print(make_queryList(abbrev_species=abbrev_species,
+                         full_species=full_species))
 
-print(make_queryList(abbrev_species=abbrev_species, full_species=full_species))
+    print(make_GenesByRNASeqEvidence(abbrev_species=abbrev_species,
+                                     study=experiment, fc_question=fc_question,
+                                     pct_question=pct_question))
 
-print(make_GenesByRNASeqEvidence(abbrev_species=abbrev_species,
-                                 study=EXPERIMENT, fc_question=fc_question,
-                                 pct_question=pct_question))
+    long_title = "RnaSeq{title}".format(title=title)
+    study_name = "{abbrev_strain}_{author}_{experiment}_rnaSeq_RSRC".format(
+        abbrev_strain=abbrev_strain, author=author,
+        experiment=experiment.replace(' ', ''))
+    key = "{abbrev_strain} mRNA RNASeq {author} {experiment}".format(
+        abbrev_strain=abbrev_strain, author=author, experiment=experiment)
+    sep = '\n' + ' ' * 18
+    table = sep.join(":'{}' {} ;".format(l, s) for s, l in groups)
 
+    print(make_fungidb_conf(track=long_title, feature=study_name,
+                            table=table, key=key, citation=citation))
 
-long_title = "RnaSeq{title}".format(title=TITLE)
-study_name = "{abbrev_strain}_{author}_{experiment}_rnaSeq_RSRC".format(
-    abbrev_strain=abbrev_strain, author=AUTHOR,
-    experiment=EXPERIMENT.replace(' ', ''))
-key = "{abbrev_strain} mRNA RNASeq {author} {experiment}".format(
-    abbrev_strain=abbrev_strain, author=AUTHOR, experiment=EXPERIMENT)
-sep = '\n' + ' ' * 18
-table = sep.join(":'{}' {} ;".format(l, s) for s, l in GROUPS)
+    print(make_gbrowseImageUrls(track=long_title))
 
+    print(make_tuningManager(dbname=dbname, perl_dir=perl_dir,
+                             perl_script=perl_script, description=description))
 
-print(make_fungidb_conf(track=long_title, feature=study_name,
-                        table=table, key=key, citation=CITATION))
-
-print(make_gbrowseImageUrls(track=long_title))
-
-print(make_tuningManager(dbname=DBNAME, perl_dir=perl_dir,
-                         perl_script=perl_script, description=DESCRIPTION))
-
-print("""
+    print("""
 #<
 bldw ApiCommonWebsite/Site $WWW/etc/webapp.prop
 bld ApiCommonShared/Model
@@ -145,15 +151,25 @@ instance_manager manage FungiDB reload fungidb.edliaw
 cd $HOME/GUS/gusApps
 gusenv
 tuningManager --instance fungbl3n --propFile $WWW/gus_home/config/tuningManagerProp.xml --doUpdate --tables 'ProfileGraphs,ProfileGraphDescrip' --configFile $WWW/project_home/ApiCommonData/Load/lib/xml/tuningManager.xml
-""")
+    """)
+
+    attr_display = "{display} Expression Data".format(display=display)
+
+    print(make_attributions(study_name=study_name, pmid=pmid,
+                            attr_display=attr_display,
+                            contact_block=make_contact_block(contacts),
+                            summary=summary, protocol=protocol,
+                            description=description,
+                            url_block=make_url_block(urls)))
 
 
-attr_display = "{display} Expression Data".format(display=display)
+def main():
+    make_rnaseq(genus=GENUS, species=SPECIES, strain=STRAIN, dbname=DBNAME,
+                groups=GROUPS, title=TITLE, author=AUTHOR,
+                experiment=EXPERIMENT, pmid=PMID, citation=CITATION,
+                summary=SUMMARY, protocol=PROTOCOL, description=DESCRIPTION,
+                contacts=CONTACTS, urls=URLS)
 
 
-print(make_attributions(study_name=study_name, pmid=PMID,
-                        attr_display=attr_display,
-                        contact_block=make_contact_block(CONTACTS),
-                        summary=SUMMARY, protocol=PROTOCOL,
-                        description=DESCRIPTION,
-                        url_block=make_url_block(URLS)))
+if __name__ == '__main__':
+    main()

@@ -28,13 +28,14 @@ TITLE = "CcinHyphalGrowth"
 AUTHOR = "Stajich"
 EXPERIMENT = "Hyphal Growth Time Series"
 PMID = ''
-CITATION = "Jason Stajich et al (Stajich lab at UC Berkeley) Unpublished data"
+CITATION = "Jason Stajich et al (Stajich lab at UC Riverside) Unpublished data"
 SUMMARY = "Identify <i>Coprinopsis cinerea</i> genes based on fold change \
 expression difference between a \"comparison\" and a \"reference\" sample."
 PROTOCOL = ""
 DESCRIPTION = "Unpublished data from <a href=\"http://lab.stajich.org\">\
-Stajich lab</a> at UC Riverside representing 2 time points (9 days and 15 \
-days) of hyphal growth on solid media for <i>Coprinopsis cinerea</i>."
+Stajich lab</a> at UC Riverside representing hyphal sections from 2 time points (9 days and 15 \
+days) of hyphal growth on solid media for <i>Coprinopsis cinerea</i>. This experiment is \
+intended to compare genes expressed on the hyphal edge and in the colony."
 CONTACTS = ({'name': 'Jason Stajich',
              'email': 'jason.stajich@ucr.edu',
              'institution': 'University of California, Riverside',

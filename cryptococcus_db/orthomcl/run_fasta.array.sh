@@ -1,7 +1,7 @@
-#PBS -N CryptoDB2 -l nodes=1:ppn=4,walltime=36:00:00,mem=2gb -j oe -o CryptoDB2.out 
-#PBS -d /bigdata/jstajich/Cryptococcus/CryptoDB/OrthoMCL.June2013/split
+#PBS -N CryptoDB3 -l nodes=1:ppn=4,walltime=36:00:00,mem=2gb -j oe -o CryptoDB3.out 
+#PBS -d /bigdata/jstajich/Cryptococcus/CryptoDB/OrthoMCL.Dec2013/split
 module load fasta
-PREF=CryptoDB2
+PREF=CryptoDB3_Dec2013
 N=$PBS_ARRAYID
 if [ ! $N ]; then
  N=$1

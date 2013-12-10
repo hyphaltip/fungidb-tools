@@ -4,7 +4,7 @@ module load stajichlab-perl
 module load orthoMCL
 module load mysql
 
-PREF=CryptoDB2
+PREF=CryptoDB3_Dec2013
 orthomclLoadBlast orthomcl.config $PREF.FASTP.bpo
 orthomclPairs orthomcl.config orthomcl_pairs.log cleanup=no
 orthomclDumpPairsFiles orthomcl.config
